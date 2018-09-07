@@ -36,9 +36,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()#pylint: disable=invalid-name
     parser.add_argument("-a", "--annotation", help="Annotation file (.gff3 format)", required=True)
     parser.add_argument("-o", "--output", help="Output file (.fasta)", default=None)
-    parser.add_argument("-m", "--move_position", help="Start and end position will be moved -start",action='store_true')
+    parser.add_argument("-m", "--move_position", help="Start and end position will be moved -start",default=False)
     parser.add_argument("-i", "--sequence_id", help="Sequence name id (empty for sinlge seq files)")
-    parser.add_argument("-s", "--start", help="Start position (empty for start of seq)", action='store_true')
-    parser.add_argument("-e", "--end", help="End position (empty for end of seq)", action='store_true')
+    parser.add_argument("-s", "--start", help="Start position (empty for start of seq)", type=int)
+    parser.add_argument("-e", "--end", help="End position (empty for end of seq)", type=int)
     args = parser.parse_args()#pylint: disable=invalid-name
     gffSlicer(args.annotation, args.sequence_id, args.start, args.end, args.move_position, args.output)
