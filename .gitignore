@@ -1,0 +1,11 @@
+test/
+venv/
+.vscode/
+.DS_Store
+nohup.out
+trash/*
+!trah/.gitkeep 
+tmp/
+.idea/
+data/
+*.ipynb_checkpoints*
