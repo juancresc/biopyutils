@@ -24,6 +24,10 @@ def gff2coverage(annotations, reference):
     gran_total_length = 0
     gran_ref_length = 0
     for seqname in sequences:
+        current_ref = df_ref[(df_ref.seqname == seqname)].iloc[0]
+        ref_len = abs(current_ref.end - current_ref.start)
+        gran_ref_length += ref_len
+
         if not seqname in overlapped:
             continue
         current = overlapped[seqname]
@@ -32,13 +36,11 @@ def gff2coverage(annotations, reference):
         for (start, end) in current:
             total_length += abs(end - start)
 
-        current_ref = df_ref[(df_ref.seqname == seqname)].iloc[0]
-        ref_len = abs(current_ref.end - current_ref.start)
         perc = total_length * 100 / ref_len
         gran_total_length += total_length
-        gran_ref_length += ref_len
+
         print('seqname %s len: %s covered: %s percentage: %f ' % (seqname, ref_len, total_length, perc,))
-        gran_perc = gran_total_length * 100 / gran_ref_length
+    gran_perc = gran_total_length * 100 / gran_ref_length
     print('Total len: %s covered: %s percentage: %f ' % (gran_ref_length, gran_total_length, gran_perc,))
 
 
