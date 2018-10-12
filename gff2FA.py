@@ -15,8 +15,8 @@ def gff2FA(annotation, sequence, windows, output):
     cont = 0
     gene_name = ""
     for record in fasta_seq:
-        for key,val in df_gff.iterrows():
-            print cont, val.start
+        dff_extract = df_gff[df_gff.seqname == record.id]
+        for key,val in dff_extract.iterrows():
             clean_seq = ''.join(str(record.seq).splitlines())
             if int(val.start) - windows < 0:
                 start = 0
