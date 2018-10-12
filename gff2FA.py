@@ -13,7 +13,6 @@ def gff2FA(annotation, sequence, windows, output):
     fasta_seq = SeqIO.parse(sequence, 'fasta')
     buffer_seqs = []
     cont = 0
-    gene_name = ""
     for record in fasta_seq:
         print(record.id)
         dff_extract = df_gff[df_gff.seqname == record.id]
@@ -29,16 +28,19 @@ def gff2FA(annotation, sequence, windows, output):
                 end = int(val.end) + windows
             new_seq = clean_seq[start:end]
             att = val.attribute
-            gene_name = att[att.find('gene')+5 : att.find(';',att.find('gene'))]
-            desc = "id:" + str(record.id)
-            desc += " start:" + str(val.start)
-            desc += " end:" + str(val.end)
+            id = record.id + '_' + str(start) + '_' + str(end)
+            desc = "seq_id:" + str(record.id)
+            desc += " feature_start:" + str(val.start)
+            desc += " feature_end:" + str(val.end)
+            desc += " genome_start:" + str(start)
+            desc += " genome_end:" + str(end)
             desc += " feature:" + str(val.feature)
             desc += " attributes:" + val.attribute
-            seq = SeqRecord(Seq(new_seq), id=gene_name, description=desc)
+            seq = SeqRecord(Seq(new_seq), id=id, description=desc)
             buffer_seqs.append(seq)
             cont += 1
     if output:
+        print('Saving...')
         SeqIO.write(buffer_seqs, output, "fasta")
     else:
         return buffer_seqs
