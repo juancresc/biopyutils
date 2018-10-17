@@ -22,3 +22,7 @@ Before using any gff parsing with pandas, headers should be removed.
 
 
 cat ann.gff |  sed '/^#/ d' > ann-clean.gff
+
+now that pandas added the possibility to comment='#', this is not required anymore.
+
+TODO more readme
