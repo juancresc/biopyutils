@@ -1,20 +1,39 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-Gets a .gff3 file which contains exons and create introns as an output .gff3
-Juan Manuel Crescente
-29 May 2018
-INTA / CONICET
+This will only work in IWGSC wheat genome assembly annotation (2018)
 '''
 def gffIntronMaker(annotation, output):
-    """
-    Not implemented yet
-    """
     import pandas as pd
-    df = pd.read_csv(annotation, index_col=False, sep='\t', header=None)    
+    introns = []
+    df = pd.read_csv(annotation, index_col=False, sep='\t', header=None, comment="#")
     df.columns = ['seqname', 'source', 'feature', 'start', 'end', 'score', 'strand', 'frame', 'attribute']
-    df = df[(df.feature == 'exon')]
-    df_introns.to_csv(output,sep='\t', encoding='utf-8', index=False, header=False, quoting=csv.QUOTE_NONE)
+    df_genes = df[(df.feature == 'mRNA')] # because I need to go transcript by transcript
+    for k1, gene in df_genes.iterrows():
+        transcript_name = gene.attribute.split("ID=transcript:")[1].split(";")[0]
+        #gene_name = gene.attribute.split("Parent=gene:")[1].split(";")[0]
+        df_exons = df[(df.feature == 'exon') & (df.attribute.str.contains('Parent=transcript:' + transcript_name))]
+        df_exons.reset_index(inplace=True)
+        df_exons.sort_values(['start'], inplace=True)
+        if len(df_exons.index) <= 1:
+            continue
+        intron_count = 0
+        for k2, exon in df_exons.iloc[:-1].iterrows():
+            exon_next = df_exons.loc[[k2 + 1]]
+            intron_count += 1
+            intron = []
+            intron.append(exon.seqname)
+            intron.append(exon.source)
+            intron.append("intron")
+            intron.append(int(exon.end) + 1)
+            intron.append(int(exon_next.start) - 1)
+            intron.append(0)
+            intron.append(exon.strand)
+            intron.append(exon.frame)
+            intron.append("Parent=transcript:%s;Name=%s-I%i" % (transcript_name, transcript_name, intron_count))
+            introns.append(intron)
+    df_introns = pd.DataFrame(introns)
+    df_introns.to_csv(output,sep='\t', encoding='utf-8', index=False, header=False)
 
 if __name__ == "__main__":
     import argparse

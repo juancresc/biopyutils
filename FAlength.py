@@ -33,7 +33,7 @@ for rec in SeqIO.parse(FastaFile, 'fasta'):
     seq = rec.seq
     seqLen = len(rec)
     total += seqLen
-    print name, seqLen, human(seqLen)
-print "Total", total, human(total)
+    print(name, seqLen, human(seqLen))
+print("Total", total, human(total))
 FastaFile.close()
 

@@ -13,8 +13,8 @@ def FAextractId(sequence, id_seq, output_fasta):
             if output_fasta:
                 SeqIO.write(buffer_seqs, output_fasta, "fasta")
             else:
-                print ">" + record.description
-                print record.seq
+                print(">" + record.description)
+                print(record.seq)
             return False
 
 if __name__ == "__main__":
@@ -22,6 +22,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()#pylint: disable=invalid-name
     parser.add_argument("-s", "--sequence", help="Sequence file (.fasta)", required=True)
     parser.add_argument("-i", "--id", help="Id to extract", required=True)
-    parser.add_argument("-o", "--output", help="Output file name (.fasta format)",action='store_true')
+    parser.add_argument("-o", "--output", help="Output file name (.fasta format)")
     args = parser.parse_args()#pylint: disable=invalid-name
     FAextractId(args.sequence, args.id, args.output)

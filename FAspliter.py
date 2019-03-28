@@ -13,7 +13,7 @@ def FAspliter(sequence, seqs, outdir):
                 buffer_seqs.setdefault(seq, []).append(record)
     if outdir[-1] != "/":
         outdir += "/"
-    for key, value in buffer_seqs.iteritems():
+    for key, value in buffer_seqs.items():
         SeqIO.write(value, outdir + key + ".fasta", "fasta")
 
 if __name__ == "__main__":

@@ -31,6 +31,7 @@ def FAslicer(sequence, id, start, end, output = False, keep_id = False):
             buff.append(seq)
             break
     if not output:
+        print('>'+new_id)
         print(new_seq)
         return buff[0]
     else:
